@@ -1,0 +1,14 @@
+* Created Vite Project
+
+-- Node & npm version lock
+* Added engines to package.json
+* Installed nvm (globally installed) & created nvmrc file with current Node version
+
+* cleaned files
+* created first git commit
+
+* installed rrd
+-- tailwindcss
+* installed tailwindcss. 
+* added to vite.config.ts
+* created index.css and imported tailwindcss
