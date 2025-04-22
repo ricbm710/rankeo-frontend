@@ -9,6 +9,6 @@
 
 * installed rrd
 -- tailwindcss
-* installed tailwindcss. 
+* installed tailwindcss & @tailwindcss/vite as Dev Dependencies
 * added to vite.config.ts
 * created index.css and imported tailwindcss
