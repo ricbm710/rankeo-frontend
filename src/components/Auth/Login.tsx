@@ -5,12 +5,24 @@ import EnterPassword from "./EnterPassword";
 
 const Login = () => {
   const [step, setStep] = useState<"email" | "password">("email");
+  const [email, setEmail] = useState<string>("");
+
+  const handleEmailSubmit = (submittedEmail: string) => {
+    setEmail(submittedEmail);
+    setStep("password");
+  };
+
+  const handleBacktoEmail = () => {
+    setStep("email");
+  };
 
   return (
-    <div className="p-2 mt-8 ">
+    <div className="p-2 mt-8">
       <h3 className="text-center text-xl text-col3 font-bold">Inicia Sesión</h3>
-      {step === "email" && <EnterEmail />}
-      {step === "password" && <EnterPassword />}
+      {step === "email" && <EnterEmail onNext={handleEmailSubmit} />}
+      {step === "password" && (
+        <EnterPassword email={email} onBack={handleBacktoEmail} />
+      )}
     </div>
   );
 };

@@ -12,6 +12,8 @@
   --color-col8: #ade8f4;
   --color-col9: #caf0f8;
   --color-col-bg: #ededed;
+  --color-col-disabled: #bbc0c4;
+  --color-col-disabled-txt: #2f333d;
 }
 
 body {
@@ -23,8 +25,8 @@ input {
   width: 100%;
   padding: 0.75rem 1rem;
   font-size: 1rem;
-  color: black; /* neutral-900 */
-  background-color: #fff;
+  color: black;
+  background-color: white;
   border: 1px solid #d1d5db; /* gray-300 */
   border-radius: 0.5rem; /* rounded-md */
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -37,9 +39,9 @@ input:focus {
 }
 
 input:disabled {
-  background-color: #f9fafb; /* gray-100 */
+  background-color: #bbc0c4; /*disabled*/
   cursor: not-allowed;
-  color: #9ca3af; /* gray-400 */
+  color: #2f333d; /*disabled txt*/
 }
 
 /* -------------------------------------------> Button */
@@ -52,7 +54,7 @@ button {
   font-size: 1rem;
   font-weight: 500;
   color: #fff;
-  background-color: #0077b6;
+  background-color: #0077b6; /*col 3*/
   border: none;
   border-radius: 0.5rem; /* match input */
   cursor: pointer;
@@ -60,7 +62,7 @@ button {
 }
 
 button:hover {
-  background-color: #023e8a;
+  background-color: #023e8a; /*col2*/
 }
 
 button:focus {
@@ -69,11 +71,42 @@ button:focus {
 }
 
 button:disabled {
-  background-color: #d1d5db; /* gray-300 */
+  background-color: #bbc0c4; /*disabled*/
   cursor: not-allowed;
-  color: #6b7280; /* gray-500 */
+  color: #2f333d; /*disabled txt*/
 }
 
 button.btn-full {
   width: 100%;
+}
+
+/* -------------------------------------------> Input Like Div */
+
+.input-like {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  color: black;
+  background-color: #bbc0c4; /*disabled*/
+  border: 1px solid #d1d5db; /* gray-300 */
+  border-radius: 0.5rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* -------------------------------------------> Link Like Button */
+
+.link-button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-family: inherit;
+}
+.link-button:hover {
+  color: darkblue;
 }
