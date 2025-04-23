@@ -3,7 +3,8 @@ import Layout from "./Layout";
 import { Route, Routes } from "react-router-dom";
 //pages
 import Home from "./pages/Home";
-import Login from "./components/Auth/Login";
+import Login from "./components/Login/Login";
+import Signup from "./components/Signup/Signup";
 
 const App = () => {
   return (
@@ -11,6 +12,7 @@ const App = () => {
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="login" element={<Login />} />
+        <Route path="signup" element={<Signup />} />
       </Route>
     </Routes>
   );

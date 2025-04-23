@@ -11,6 +11,7 @@
   --color-col7: #90e0ef;
   --color-col8: #ade8f4;
   --color-col9: #caf0f8;
+  --color-col10: #cccccc;
   --color-col-bg: #ededed;
   --color-col-disabled: #bbc0c4;
   --color-col-disabled-txt: #2f333d;
@@ -80,6 +81,11 @@ button.btn-full {
   width: 100%;
 }
 
+button.btn-secondary {
+  background-color: #2f333d;
+  color: #0077b6;
+}
+
 /* -------------------------------------------> Input Like Div */
 
 .input-like {
@@ -89,6 +95,20 @@ button.btn-full {
   font-size: 1rem;
   color: black;
   background-color: #bbc0c4; /*disabled*/
+  border: 1px solid #d1d5db; /* gray-300 */
+  border-radius: 0.5rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* -------------------------------------------> Button Like Div */
+
+.button-like {
+  /* display: block; */
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  color: black;
+  background-color: #cccccc;
   border: 1px solid #d1d5db; /* gray-300 */
   border-radius: 0.5rem;
   transition: border-color 0.2s, box-shadow 0.2s;
