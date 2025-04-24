@@ -5,6 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
+import SignupEmail from "./components/Signup/SignupEmail";
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
         <Route index element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
+        <Route path="signup/email" element={<SignupEmail />} />
       </Route>
     </Routes>
   );

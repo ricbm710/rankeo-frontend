@@ -1,5 +1,8 @@
 //rrd
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+//react-icons
+import { FaGoogle, FaFacebookF } from "react-icons/fa";
+import { MdEmail } from "react-icons/md";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -10,22 +13,25 @@ const Signup = () => {
         Registrate
       </h3>
       <div
-        className="button-like flex flex-col justify-center items-center mb-2 cursor-pointer"
+        className="button-like flex flex-row justify-center items-center mb-2 cursor-pointer gap-2"
         onClick={() => navigate("/signup/email")}
       >
-        Correo Electronico
+        <MdEmail color="#0077b6" size="1.5em" />
+        <div>Correo</div>
       </div>
       <div
-        className="button-like flex flex-col justify-center items-center mb-2 cursor-pointer"
+        className="button-like flex flex-row justify-center items-center mb-2 cursor-pointer gap-2"
         onClick={() => navigate("/auth/facebook")}
       >
-        Facebook
+        <FaFacebookF color="#0077b6" size="1.5em" />
+        <div>Facebook</div>
       </div>
       <div
-        className="button-like flex flex-col justify-center items-center mb-2 cursor-pointer"
+        className="button-like flex flex-row justify-center items-center mb-2 cursor-pointer gap-2"
         onClick={() => navigate("/auth/google")}
       >
-        Gmail
+        <FaGoogle color="#0077b6" size="1.5em" />
+        <div>Google</div>
       </div>
       <div className="flex flex-row gap-2 items-center justify-center">
         <p>Ya tienes una cuenta?</p>
