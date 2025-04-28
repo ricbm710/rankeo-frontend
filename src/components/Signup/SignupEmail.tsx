@@ -1,8 +1,23 @@
+import { useState } from "react";
 //rrd
 import { useNavigate } from "react-router-dom";
+import { CreateUserInput } from "../../types/createUserInput";
 
 const SignupEmail = () => {
   const navigate = useNavigate();
+
+  const [inputData, setInputData] = useState<CreateUserInput>({
+    name: "",
+    email: "",
+    auth_provider: "local",
+    // provider_id: '',
+    password: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setInputData((prevData) => ({ ...prevData, [name]: value }));
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -19,15 +34,23 @@ const SignupEmail = () => {
           name="email"
           id="email"
           placeholder="Ingresa tu correo"
-          required
+          onChange={handleChange}
+        />
+        <input
+          type="name"
+          name="name"
+          id="name"
+          placeholder="Ingresa tu nombre de usuario"
+          className="mt-2"
+          onChange={handleChange}
         />
         <input
           type="password"
           name="password"
           id="password"
           placeholder="Ingresa tu contraseña"
-          required
           className="mt-2"
+          onChange={handleChange}
         />
         <button type="submit" className="btn-full mt-4">
           Continuar
