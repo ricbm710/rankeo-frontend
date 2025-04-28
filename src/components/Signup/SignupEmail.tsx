@@ -4,12 +4,16 @@ import { useNavigate } from "react-router-dom";
 const SignupEmail = () => {
   const navigate = useNavigate();
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
+
   return (
     <div className="p-2 mt-8">
       <h3 className="text-center text-xl text-col3 font-bold mb-4">
         Registrate con Correo
       </h3>
-      <form className="mb-2">
+      <form className="mb-2" onSubmit={handleSubmit}>
         <input
           type="email"
           name="email"
