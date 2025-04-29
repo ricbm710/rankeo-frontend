@@ -1,7 +1,10 @@
 import { useState } from "react";
 //rrd
 import { useNavigate } from "react-router-dom";
+//types
 import { CreateUserInput } from "../../types/createUserInput";
+//utils
+import { createUser } from "../../utils/dbutils/userOperations";
 
 const SignupEmail = () => {
   const navigate = useNavigate();
@@ -19,8 +22,16 @@ const SignupEmail = () => {
     setInputData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    try {
+      const result = await createUser(inputData);
+      // Do something with result if needed (e.g., redirect, show success message)
+      navigate("/");
+    } catch (error) {
+      // Handle error (e.g., show toast, display message in UI)
+      console.error("Error creating user:", error);
+    }
   };
 
   return (

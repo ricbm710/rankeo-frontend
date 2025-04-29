@@ -7,7 +7,7 @@ export const createUser = async (data: CreateUserInput) => {
   const API_URL = import.meta.env.VITE_API_URL;
 
   // Ensure the API URL is correctly formatted
-  const url = new URL("/players", API_URL).toString();
+  const url = new URL("users", API_URL).toString();
 
   const { name, email, auth_provider, provider_id, password } = data;
 
