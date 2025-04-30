@@ -3,8 +3,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 //types
 import { CreateUserInput } from "../../types/createUserInput";
-//utils
+//db-utils
 import { createUser } from "../../utils/dbutils/userOperations";
+//misc-utils
+import { isValidEmail } from "../../utils/miscutils/inputValidation";
 
 const SignupEmail = () => {
   const navigate = useNavigate();
@@ -17,6 +19,14 @@ const SignupEmail = () => {
     password: "",
   });
 
+  const [inputErrors, setInputErrors] = useState<{
+    email?: string;
+    name?: string;
+    password?: string;
+  }>({});
+
+  /* -------------------------------------------------------------------- handler functions */
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setInputData((prevData) => ({ ...prevData, [name]: value }));
@@ -24,13 +34,25 @@ const SignupEmail = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const result = await createUser(inputData);
-      // Do something with result if needed (e.g., redirect, show success message)
-      navigate("/");
-    } catch (error) {
-      // Handle error (e.g., show toast, display message in UI)
-      console.error("Error creating user:", error);
+
+    const newErrors: typeof inputErrors = {};
+    if (!inputData.email || !isValidEmail(inputData.email))
+      newErrors.email = "Correo inválido";
+    if (!inputData.password || inputData.password.length < 6)
+      newErrors.password = "Contraseña debe tener 6 caracteres mínimo";
+    if (!inputData.name) newErrors.name = "Escribe un nombre de usuario";
+
+    setInputErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
+      try {
+        const result = await createUser(inputData);
+        // Do something with result if needed (e.g., redirect, show success message)
+        navigate("/");
+      } catch (error) {
+        // Handle error (e.g., show toast, display message in UI)
+        console.error("Error creating user:", error);
+      }
     }
   };
 
@@ -39,7 +61,7 @@ const SignupEmail = () => {
       <h3 className="text-center text-xl text-col3 font-bold mb-4">
         Registrate con Correo
       </h3>
-      <form className="mb-2" onSubmit={handleSubmit}>
+      <form className="mb-2" onSubmit={handleSubmit} noValidate>
         <input
           type="email"
           name="email"
@@ -47,6 +69,9 @@ const SignupEmail = () => {
           placeholder="Ingresa tu correo"
           onChange={handleChange}
         />
+        {inputErrors.email && (
+          <p className="text-red-500 text-xs p-1">* {inputErrors.email}</p>
+        )}
         <input
           type="name"
           name="name"
@@ -55,6 +80,9 @@ const SignupEmail = () => {
           className="mt-2"
           onChange={handleChange}
         />
+        {inputErrors.name && (
+          <p className="text-red-500 text-xs p-1">* {inputErrors.name}</p>
+        )}
         <input
           type="password"
           name="password"
@@ -63,6 +91,9 @@ const SignupEmail = () => {
           className="mt-2"
           onChange={handleChange}
         />
+        {inputErrors.password && (
+          <p className="text-red-500 text-xs p-1">* {inputErrors.password}</p>
+        )}
         <button type="submit" className="btn-full mt-4">
           Continuar
         </button>
