@@ -2,10 +2,13 @@
 import axios from "axios";
 //types
 import { CreateUserInput } from "../../types/createUserInput";
+import { EmailLoginInput } from "../../types/emailLoginInput";
+//utils
+import { handleAxiosError } from "./handleAxiosErrors";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const createUser = async (data: CreateUserInput) => {
-  const API_URL = import.meta.env.VITE_API_URL;
-
   // Ensure the API URL is correctly formatted
   const url = new URL("users", API_URL).toString();
 
@@ -22,19 +25,23 @@ export const createUser = async (data: CreateUserInput) => {
 
     return response.data; // You might want to return the response if you need to handle it later
   } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
-      console.error("Backend Error:", error.response?.data?.error);
-    } else {
-      console.error("Network Error:", error);
-    }
+    handleAxiosError(error, "No se pudo crear el usuario.");
+  }
+};
 
-    // Accessing error.response safely after narrowing
-    if (axios.isAxiosError(error) && error.response) {
-      throw new Error(
-        `Unable to create new User. Backend returned: ${error.response.data.error}`
-      );
-    } else {
-      throw new Error("Unable to create new User.");
-    }
+/* --------------------------------------------------------------------  */
+export const emailLogin = async (data: EmailLoginInput) => {
+  const { email, password } = data;
+
+  const url = new URL("login", API_URL).toString();
+
+  try {
+    const response = await axios.post(url, {
+      email,
+      password,
+    });
+    return response.data;
+  } catch (error: unknown) {
+    handleAxiosError(error, "No se pudo iniciar la sesión");
   }
 };

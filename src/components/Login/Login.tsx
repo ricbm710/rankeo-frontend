@@ -7,6 +7,8 @@ const Login = () => {
   const [step, setStep] = useState<"email" | "password">("email");
   const [email, setEmail] = useState<string>("");
 
+  /* -------------------------------------------------------------------- handler functions */
+
   const handleEmailSubmit = (submittedEmail: string) => {
     setEmail(submittedEmail);
     setStep("password");

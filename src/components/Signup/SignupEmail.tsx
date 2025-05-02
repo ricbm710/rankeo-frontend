@@ -46,12 +46,12 @@ const SignupEmail = () => {
 
     if (Object.keys(newErrors).length === 0) {
       try {
-        const result = await createUser(inputData);
+        const result = await createUser(inputData); //TODO
         // Do something with result if needed (e.g., redirect, show success message)
         navigate("/");
       } catch (error) {
         // Handle error (e.g., show toast, display message in UI)
-        console.error("Error creating user:", error);
+        console.error("Error al crear el usuario:", error); //TODO
       }
     }
   };

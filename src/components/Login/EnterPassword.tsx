@@ -1,11 +1,32 @@
+import { useState } from "react";
+//utils
+import { emailLogin } from "../../utils/dbutils/userOperations";
+
 type Props = {
   email: string;
   onBack: () => void;
 };
 
 const EnterPassword = ({ email, onBack }: Props) => {
+  const [passwordInput, setPasswordInput] = useState<string>("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPasswordInput(e.target.value);
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const result = await emailLogin({ email, password: passwordInput }); //TODO
+      console.log(result);
+    } catch (error) {
+      console.error("Error al iniciar sesión.", error); //TODO
+    }
+  };
+
   return (
-    <form className="p-4">
+    <form className="p-4" onSubmit={handleSubmit}>
       <div className="input-like">
         <div>{email}</div>
       </div>
@@ -18,6 +39,7 @@ const EnterPassword = ({ email, onBack }: Props) => {
         id="password"
         className="mt-2"
         placeholder="Ingresa tu contraseña"
+        onChange={handleChange}
       />
 
       <button type="submit" className="btn-full mt-4">
