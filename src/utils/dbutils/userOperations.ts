@@ -36,10 +36,14 @@ export const emailLogin = async (data: EmailLoginInput) => {
   const url = new URL("login", API_URL).toString();
 
   try {
-    const response = await axios.post(url, {
-      email,
-      password,
-    });
+    const response = await axios.post(
+      url,
+      {
+        email,
+        password,
+      },
+      { withCredentials: true }
+    );
     return response.data;
   } catch (error: unknown) {
     handleAxiosError(error, "No se pudo iniciar la sesión");
