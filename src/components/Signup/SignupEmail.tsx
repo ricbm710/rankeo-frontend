@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 //types
 import { CreateUserInput } from "../../types/createUserInput";
 //db-utils
-import { createUser } from "../../utils/dbutils/userOperations";
+import { createUser, emailLogin } from "../../utils/dbutils/userOperations";
 //misc-utils
 import { isValidEmail } from "../../utils/miscutils/inputValidation";
 
@@ -46,8 +46,19 @@ const SignupEmail = () => {
 
     if (Object.keys(newErrors).length === 0) {
       try {
-        const result = await createUser(inputData); //TODO
+        const createResult = await createUser(inputData); //TODO
         // Do something with result if needed (e.g., redirect, show success message)
+        console.log(createResult);
+        // Login immediately
+        const { email, password } = inputData;
+        if (email && password) {
+          const loginResult = await emailLogin({
+            email,
+            password,
+          });
+          console.log(loginResult);
+        }
+
         navigate("/");
       } catch (error) {
         // Handle error (e.g., show toast, display message in UI)
