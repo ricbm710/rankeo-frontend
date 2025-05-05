@@ -49,3 +49,16 @@ export const emailLogin = async (data: EmailLoginInput) => {
     handleAxiosError(error, "No se pudo iniciar la sesión");
   }
 };
+
+/* --------------------------------------------------------------------  */
+
+export const getCurrentUser = async () => {
+  const url = new URL("me", API_URL).toString();
+
+  try {
+    const response = await axios.get(url, { withCredentials: true });
+    return response.data;
+  } catch (error: unknown) {
+    handleAxiosError(error, "No se pudo obtener info del usuario.");
+  }
+};
