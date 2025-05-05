@@ -14,10 +14,12 @@ interface UserContextType {
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
+// This is like a container for the info I want to persist
 export const UserContext = createContext<UserContextType | undefined>(
   undefined
 );
 
+// This is what happens when the App loads for the first time
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);

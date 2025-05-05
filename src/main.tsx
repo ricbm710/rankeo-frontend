@@ -7,14 +7,14 @@ import App from "./App.tsx";
 //rrd
 import { BrowserRouter } from "react-router-dom";
 //contexts
-// import { UserProvider } from "./contexts/UserContext.ts";
+import { UserProvider } from "./contexts/UserContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter basename={import.meta.env.VITE_BASE_PATH}>
-      {/* <UserProvider> */}
-      <App />
-      {/* </UserProvider> */}
+      <UserProvider>
+        <App />
+      </UserProvider>
     </BrowserRouter>
   </StrictMode>
 );
