@@ -14,6 +14,8 @@ type Props = {
 const EnterPassword = ({ email, onBack }: Props) => {
   const [passwordInput, setPasswordInput] = useState<string>("");
 
+  const [loginError, setLoginError] = useState<string | null>(null);
+
   const { setUser } = useUser();
 
   const navigate = useNavigate();
@@ -34,6 +36,7 @@ const EnterPassword = ({ email, onBack }: Props) => {
       navigate("/");
     } catch (error) {
       console.error("Error al iniciar sesión.", error); //TODO
+      setLoginError("Error al iniciar sesión.");
     }
   };
 
@@ -57,6 +60,7 @@ const EnterPassword = ({ email, onBack }: Props) => {
       <button type="submit" className="btn-full mt-4">
         Continuar
       </button>
+      {loginError && <p className="text-red-500 text-xs p-1">* {loginError}</p>}
     </form>
   );
 };
