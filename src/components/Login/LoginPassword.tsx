@@ -11,7 +11,7 @@ type Props = {
   onBack: () => void;
 };
 
-const EnterPassword = ({ email, onBack }: Props) => {
+const LoginPassword = ({ email, onBack }: Props) => {
   const [passwordInput, setPasswordInput] = useState<string>("");
 
   const [loginError, setLoginError] = useState<string | null>(null);
@@ -65,4 +65,4 @@ const EnterPassword = ({ email, onBack }: Props) => {
   );
 };
 
-export default EnterPassword;
+export default LoginPassword;
