@@ -1,6 +1,10 @@
 import { useState } from "react";
 //utils
-import { emailLogin } from "../../utils/dbutils/userOperations";
+import { emailLogin, getCurrentUser } from "../../utils/dbutils/userOperations";
+//custom hooks
+import { useUser } from "../../hooks/useUser";
+//rrd
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   email: string;
@@ -10,6 +14,10 @@ type Props = {
 const EnterPassword = ({ email, onBack }: Props) => {
   const [passwordInput, setPasswordInput] = useState<string>("");
 
+  const { setUser } = useUser();
+
+  const navigate = useNavigate();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPasswordInput(e.target.value);
   };
@@ -18,8 +26,12 @@ const EnterPassword = ({ email, onBack }: Props) => {
     e.preventDefault();
 
     try {
-      const result = await emailLogin({ email, password: passwordInput }); //TODO
-      console.log(result);
+      await emailLogin({ email, password: passwordInput }); // Just login
+
+      const freshUser = await getCurrentUser(); // ⏱️ Fetch from backend
+      setUser(freshUser); // ✅ Set latest info
+
+      navigate("/");
     } catch (error) {
       console.error("Error al iniciar sesión.", error); //TODO
     }
