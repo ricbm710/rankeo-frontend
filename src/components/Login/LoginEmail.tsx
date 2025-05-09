@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { isValidEmail } from "../../utils/miscutils/inputValidation";
+import { checkEmailExists } from "../../utils/dbutils/userOperations";
 
 type Props = {
   onNext: (email: string) => void;
@@ -10,11 +11,24 @@ const LoginEmail = ({ onNext }: Props) => {
 
   const [inputError, setInputError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (isValidEmail(emailInput)) {
-      onNext(emailInput);
+      //reset
+      setInputError(null);
+      // check db
+      try {
+        const emailExists = await checkEmailExists(emailInput);
+        if (!emailExists) {
+          onNext(emailInput);
+        } else {
+          setInputError("Este correo ya está siendo utilizado.");
+        }
+      } catch (error) {
+        console.log("No se pudo verificar el correo.");
+        setInputError("No se pudo verificar el correo.");
+      }
     } else {
       setInputError("Correo Inválido");
     }

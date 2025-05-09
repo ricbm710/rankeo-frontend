@@ -14,6 +14,8 @@ type Props = {
 const LoginPassword = ({ email, onBack }: Props) => {
   const [passwordInput, setPasswordInput] = useState<string>("");
 
+  const [inputError, setInputError] = useState<string | null>(null);
+
   const [loginError, setLoginError] = useState<string | null>(null);
 
   const { setUser } = useUser();
@@ -27,16 +29,21 @@ const LoginPassword = ({ email, onBack }: Props) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try {
-      await emailLogin({ email, password: passwordInput }); // Just login
+    if (passwordInput.length < 6) {
+      setInputError("Contraseña debe tener 6 caracteres mínimo");
+    } else {
+      setInputError(null);
+      try {
+        await emailLogin({ email, password: passwordInput });
 
-      const freshUser = await getCurrentUser(); // ⏱️ Fetch from backend
-      setUser(freshUser); // ✅ Set latest info
+        const freshUser = await getCurrentUser(); // ⏱️ Fetch from backend
+        setUser(freshUser); // ✅ Set latest info
 
-      navigate("/");
-    } catch (error) {
-      console.error("Error al iniciar sesión.", error); //TODO
-      setLoginError("Error al iniciar sesión.");
+        navigate("/");
+      } catch (error) {
+        console.error("Error al iniciar sesión.", error); //TODO
+        setLoginError("Error al iniciar sesión.");
+      }
     }
   };
 
@@ -56,7 +63,7 @@ const LoginPassword = ({ email, onBack }: Props) => {
         placeholder="Ingresa tu contraseña"
         onChange={handleChange}
       />
-
+      {inputError && <p className="text-red-500 text-xs p-1">* {inputError}</p>}
       <button type="submit" className="btn-full mt-4">
         Continuar
       </button>

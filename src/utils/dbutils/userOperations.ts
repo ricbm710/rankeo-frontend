@@ -62,3 +62,17 @@ export const getCurrentUser = async () => {
     handleAxiosError(error, "No se pudo obtener info del usuario.");
   }
 };
+
+/* --------------------------------------------------------------------  */
+
+export const checkEmailExists = async (email: string) => {
+  const url = new URL("check-email", API_URL);
+  url.searchParams.append("email", email);
+
+  try {
+    const response = await axios.get(url.toString());
+    return response.data.exists;
+  } catch (error: unknown) {
+    handleAxiosError(error, "No se pudo verificar el correo.");
+  }
+};
