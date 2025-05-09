@@ -4,7 +4,11 @@ import { useNavigate } from "react-router-dom";
 //types
 import { CreateUserInput } from "../../types/createUserInput";
 //db-utils
-import { createUser, emailLogin } from "../../utils/dbutils/userOperations";
+import {
+  checkEmailExists,
+  createUser,
+  emailLogin,
+} from "../../utils/dbutils/userOperations";
 //misc-utils
 import { isValidEmail } from "../../utils/miscutils/inputValidation";
 
@@ -36,8 +40,20 @@ const SignupEmail = () => {
     e.preventDefault();
 
     const newErrors: typeof inputErrors = {};
-    if (!inputData.email || !isValidEmail(inputData.email))
+    if (!inputData.email || !isValidEmail(inputData.email)) {
       newErrors.email = "Correo inválido";
+    } else {
+      // check db
+      try {
+        const emailExists = await checkEmailExists(inputData.email);
+        if (emailExists) {
+          newErrors.email = "Este correo ya está siendo usado";
+        }
+      } catch (error) {
+        console.log("No se pudo verificar el correo.");
+        newErrors.email = "No se pudo verificar el correo";
+      }
+    }
     if (!inputData.password || inputData.password.length < 6)
       newErrors.password = "Contraseña debe tener 6 caracteres mínimo";
     if (!inputData.name) newErrors.name = "Escribe un nombre de usuario";

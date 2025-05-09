@@ -20,10 +20,10 @@ const LoginEmail = ({ onNext }: Props) => {
       // check db
       try {
         const emailExists = await checkEmailExists(emailInput);
-        if (!emailExists) {
+        if (emailExists) {
           onNext(emailInput);
         } else {
-          setInputError("Este correo ya está siendo utilizado.");
+          setInputError("Este correo no existe en la base de datos.");
         }
       } catch (error) {
         console.log("No se pudo verificar el correo.");
