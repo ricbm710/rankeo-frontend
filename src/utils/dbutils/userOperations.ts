@@ -24,8 +24,8 @@ export const createUser = async (data: CreateUserInput) => {
     });
 
     return response.data; // You might want to return the response if you need to handle it later
-  } catch (error: unknown) {
-    handleAxiosError(error, "No se pudo crear el usuario.");
+  } catch (error) {
+    handleAxiosError(error);
   }
 };
 
@@ -44,9 +44,10 @@ export const emailLogin = async (data: EmailLoginInput) => {
       },
       { withCredentials: true }
     );
+
     return response.data;
-  } catch (error: unknown) {
-    handleAxiosError(error, "No se pudo iniciar la sesión");
+  } catch (error) {
+    handleAxiosError(error);
   }
 };
 
@@ -58,8 +59,8 @@ export const getCurrentUser = async () => {
   try {
     const response = await axios.get(url, { withCredentials: true });
     return response.data;
-  } catch (error: unknown) {
-    handleAxiosError(error, "No se pudo obtener info del usuario.");
+  } catch (error) {
+    handleAxiosError(error);
   }
 };
 
@@ -72,7 +73,7 @@ export const checkEmailExists = async (email: string) => {
   try {
     const response = await axios.get(url.toString());
     return response.data.exists;
-  } catch (error: unknown) {
-    handleAxiosError(error, "No se pudo verificar el correo.");
+  } catch (error) {
+    handleAxiosError(error);
   }
 };

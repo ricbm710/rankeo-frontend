@@ -14,8 +14,6 @@ type Props = {
 const LoginPassword = ({ email, onBack }: Props) => {
   const [passwordInput, setPasswordInput] = useState<string>("");
 
-  const [inputError, setInputError] = useState<string | null>(null);
-
   const [loginError, setLoginError] = useState<string | null>(null);
 
   const { setUser } = useUser();
@@ -30,9 +28,9 @@ const LoginPassword = ({ email, onBack }: Props) => {
     e.preventDefault();
 
     if (passwordInput.length < 6) {
-      setInputError("Contraseña debe tener 6 caracteres mínimo");
+      setLoginError("Contraseña debe tener 6 caracteres mínimo");
     } else {
-      setInputError(null);
+      setLoginError(null);
       try {
         await emailLogin({ email, password: passwordInput });
 
@@ -41,8 +39,11 @@ const LoginPassword = ({ email, onBack }: Props) => {
 
         navigate("/");
       } catch (error) {
-        console.error("Error al iniciar sesión.", error); //TODO
-        setLoginError("Error al iniciar sesión.");
+        if (error instanceof Error) {
+          setLoginError(error.message);
+        } else {
+          setLoginError("Error de Servidor.");
+        }
       }
     }
   };
@@ -63,11 +64,10 @@ const LoginPassword = ({ email, onBack }: Props) => {
         placeholder="Ingresa tu contraseña"
         onChange={handleChange}
       />
-      {inputError && <p className="text-red-500 text-xs p-1">* {inputError}</p>}
+      {loginError && <p className="text-red-500 text-xs p-1">* {loginError}</p>}
       <button type="submit" className="btn-full mt-4">
         Continuar
       </button>
-      {loginError && <p className="text-red-500 text-xs p-1">* {loginError}</p>}
     </form>
   );
 };

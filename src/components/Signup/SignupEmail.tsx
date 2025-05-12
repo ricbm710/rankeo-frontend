@@ -8,12 +8,17 @@ import {
   checkEmailExists,
   createUser,
   emailLogin,
+  getCurrentUser,
 } from "../../utils/dbutils/userOperations";
 //misc-utils
 import { isValidEmail } from "../../utils/miscutils/inputValidation";
+//custom hooks
+import { useUser } from "../../hooks/useUser";
 
 const SignupEmail = () => {
   const navigate = useNavigate();
+
+  const { setUser } = useUser();
 
   const [inputData, setInputData] = useState<CreateUserInput>({
     name: "",
@@ -22,6 +27,8 @@ const SignupEmail = () => {
     // provider_id: '',
     password: "",
   });
+
+  const [loginError, setLoginError] = useState<string | null>(null);
 
   const [inputErrors, setInputErrors] = useState<{
     email?: string;
@@ -39,48 +46,65 @@ const SignupEmail = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const hasErrors = await hasValidationErrors(); // <-- Call and await it
+
+    if (hasErrors) return; // Stop if validation failed
+
+    try {
+      // Create User
+      await createUser(inputData);
+
+      // Login immediately
+      const { email, password } = inputData;
+      if (email && password) {
+        await emailLogin({
+          email,
+          password,
+        });
+      }
+
+      const freshUser = await getCurrentUser(); // ⏱️ Fetch from backend
+      setUser(freshUser); // ✅ Set latest info
+
+      navigate("/");
+    } catch (error) {
+      if (error instanceof Error) {
+        setLoginError(error.message);
+      } else {
+        setLoginError("Error de Servidor.");
+      }
+    }
+  };
+
+  // ----------------------------------------------------------------------> misc util
+
+  const hasValidationErrors = async () => {
     const newErrors: typeof inputErrors = {};
+
     if (!inputData.email || !isValidEmail(inputData.email)) {
-      newErrors.email = "Correo inválido";
+      newErrors.email = "Correo inválido.";
     } else {
-      // check db
       try {
         const emailExists = await checkEmailExists(inputData.email);
         if (emailExists) {
-          newErrors.email = "Este correo ya está siendo usado";
+          newErrors.email = "Este correo ya está siendo usado.";
         }
       } catch (error) {
-        console.log("No se pudo verificar el correo.");
-        newErrors.email = "No se pudo verificar el correo";
+        newErrors.email = "No se pudo verificar el correo.";
       }
     }
-    if (!inputData.password || inputData.password.length < 6)
-      newErrors.password = "Contraseña debe tener 6 caracteres mínimo";
-    if (!inputData.name) newErrors.name = "Escribe un nombre de usuario";
+
+    if (!inputData.password || inputData.password.length < 6) {
+      newErrors.password = "Contraseña debe tener 6 caracteres mínimo.";
+    }
+
+    if (!inputData.name) {
+      newErrors.name = "Escribe un nombre de usuario.";
+    }
 
     setInputErrors(newErrors);
 
-    if (Object.keys(newErrors).length === 0) {
-      try {
-        const createResult = await createUser(inputData); //TODO
-        // Do something with result if needed (e.g., redirect, show success message)
-        console.log(createResult);
-        // Login immediately
-        const { email, password } = inputData;
-        if (email && password) {
-          const loginResult = await emailLogin({
-            email,
-            password,
-          });
-          console.log(loginResult);
-        }
-
-        navigate("/");
-      } catch (error) {
-        // Handle error (e.g., show toast, display message in UI)
-        console.error("Error al crear el usuario:", error); //TODO
-      }
-    }
+    return Object.keys(newErrors).length > 0;
   };
 
   return (

@@ -23,14 +23,14 @@ const LoginEmail = ({ onNext }: Props) => {
         if (emailExists) {
           onNext(emailInput);
         } else {
-          setInputError("Este correo no existe en la base de datos.");
+          setInputError("Este correo no corresponde con ninguna cuenta.");
         }
       } catch (error) {
         console.log("No se pudo verificar el correo.");
         setInputError("No se pudo verificar el correo.");
       }
     } else {
-      setInputError("Correo Inválido");
+      setInputError("Correo Inválido.");
     }
   };
 

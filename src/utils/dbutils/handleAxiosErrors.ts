@@ -1,17 +1,17 @@
 import axios from "axios";
 
-export const handleAxiosError = (error: unknown, defaultMessage: string) => {
+export const handleAxiosError = (error: unknown) => {
   if (axios.isAxiosError(error)) {
-    console.error("Backend Error:", error.response?.data?.error);
-  } else {
-    console.error("Network Error:", error);
+    const data = error.response?.data;
+
+    // Try to grab backend message or fallback
+    const message =
+      typeof data === "string"
+        ? data
+        : data?.message || data?.error || "Error de Servidor.";
+
+    throw new Error(message);
   }
 
-  if (axios.isAxiosError(error) && error.response) {
-    throw new Error(
-      `${defaultMessage} Backend returned: ${error.response.data.error}`
-    );
-  } else {
-    throw new Error(defaultMessage);
-  }
+  throw new Error("Error de Servidor.");
 };
