@@ -27,10 +27,17 @@ const Preview = ({ post }: { post: PostPreview }) => {
             <div>{post.downvotes}</div>
           </div>
         </div>
-        <div className="text-sm text-gray-500 italic flex flex-col justify-center ms-4">
-          <p>
-            Publicado: <span>{formattedDate}</span>
-          </p>
+        <div className="flex flex-row justify-between items-center p-2 w-full">
+          <div className="ms-2">
+            <p className="">{post.optionVotesCount} votos</p>
+          </div>
+          <div className="">
+            <p>
+              <span className="text-xs text-gray-500 italic">
+                {formattedDate}
+              </span>
+            </p>
+          </div>
         </div>
       </div>
     </div>

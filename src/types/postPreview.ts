@@ -15,4 +15,5 @@ export interface PostPreview {
   upvotes: number;
   downvotes: number;
   score: number;
+  optionVotesCount: number;
 }

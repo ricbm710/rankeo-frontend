@@ -13,6 +13,7 @@ const Home = () => {
 
   const [posts, setPosts] = useState<PostPreview[]>([]);
   const [contentLoading, setContentLoading] = useState<boolean>(true);
+  const [contentError, setContentError] = useState<string | null>(null);
 
   useEffect(() => {
     const getPosts = async () => {
@@ -22,7 +23,7 @@ const Home = () => {
         setContentLoading(false);
       } catch (error) {
         console.error("No se pudo traer las publicaciones:", error);
-        setContentLoading(true);
+        setContentError("No se pudo cargar el contenido.");
       }
     };
     getPosts();
@@ -38,16 +39,20 @@ const Home = () => {
   //   return <div>Usuario no logueado</div>;
   // }
 
-  if (contentLoading) {
-    return <div>Cargando contenido...</div>;
-  }
-
   return (
     <>
       <div>
-        {posts.map((post) => (
-          <Preview post={post} key={post.id} />
-        ))}
+        {contentError ? (
+          <p>{contentError}</p>
+        ) : contentLoading ? (
+          <p>Cargando Contenido...</p>
+        ) : (
+          <div>
+            {posts.map((post) => (
+              <Preview post={post} key={post.id} />
+            ))}
+          </div>
+        )}
       </div>
     </>
   );
