@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-//custom hooks
-// import { useUser } from "../hooks/useUser";
+
 //interfaces
 import { PostPreview } from "../types/postPreview";
 //utils
@@ -9,8 +8,6 @@ import { getPostsWithVotes } from "../utils/dbutils/postOperations";
 import Preview from "../components/Post/Preview";
 
 const Home = () => {
-  // const { user, loading } = useUser();
-
   const [posts, setPosts] = useState<PostPreview[]>([]);
   const [contentLoading, setContentLoading] = useState<boolean>(true);
   const [contentError, setContentError] = useState<string | null>(null);
@@ -28,16 +25,6 @@ const Home = () => {
     };
     getPosts();
   }, []);
-
-  console.log(posts);
-
-  // if (loading) {
-  //   return <div>Cargando Usuario...</div>;
-  // }
-
-  // if (!user) {
-  //   return <div>Usuario no logueado</div>;
-  // }
 
   return (
     <>
