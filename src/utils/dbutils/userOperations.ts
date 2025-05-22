@@ -77,3 +77,19 @@ export const checkEmailExists = async (email: string) => {
     handleAxiosError(error);
   }
 };
+
+/* --------------------------------------------------------------------  */
+
+export const logoutUser = async () => {
+  const url = new URL("logout", API_URL).toString();
+  try {
+    const response = await axios.post(
+      url,
+      {},
+      { withCredentials: true } // This is KEY to send the auth_token cookie!
+    );
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error);
+  }
+};

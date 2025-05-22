@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 //rrd
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 //custom hooks
 import { useUser } from "../hooks/useUser";
 //react-icons
 import { FaUser } from "react-icons/fa";
+//utils
+import { logoutUser } from "../utils/dbutils/userOperations";
 
 const Navbar = () => {
   const location = useLocation();
@@ -12,7 +14,9 @@ const Navbar = () => {
     location.pathname.startsWith(path)
   );
 
-  const { user, loading } = useUser();
+  const { user, loading, setUser } = useUser();
+
+  const navigate = useNavigate();
 
   //profile dropdown menu
   const [isOpen, setIsOpen] = useState(false);
@@ -32,6 +36,18 @@ const Navbar = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // -------------------------------------------------------->
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser(); // calls the logout util function
+      setUser(null);
+      navigate("/");
+    } catch (err) {
+      console.error("No se pudo cerrar la sesión:", err);
+    }
+  };
 
   return (
     <div className="bg-col3 flex flex-row items-center justify-between">
@@ -68,7 +84,10 @@ const Navbar = () => {
             >
               Mi Perfil
             </Link>
-            <button className="btn-dropdown px-4 py-2 text-sm hover:bg-gray-100">
+            <button
+              className="btn-dropdown px-4 py-2 text-sm hover:bg-gray-100"
+              onClick={handleLogout}
+            >
               Cerrar Sesión
             </button>
           </div>
