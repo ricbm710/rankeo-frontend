@@ -28,7 +28,7 @@ const SignupEmail = () => {
     password: "",
   });
 
-  const [loginError, setLoginError] = useState<string | null>(null);
+  const [submitError, setsubmitError] = useState<string | null>(null);
 
   const [inputErrors, setInputErrors] = useState<{
     email?: string;
@@ -69,9 +69,9 @@ const SignupEmail = () => {
       navigate("/");
     } catch (error) {
       if (error instanceof Error) {
-        setLoginError(error.message);
+        setsubmitError(error.message);
       } else {
-        setLoginError("Error de Servidor.");
+        setsubmitError("Error de Servidor.");
       }
     }
   };
@@ -158,6 +158,10 @@ const SignupEmail = () => {
         <button type="submit" className="btn-full mt-4">
           Continuar
         </button>
+        <p className="text-red-500 text-xs p-1">* No se pudo che</p>
+        {submitError && (
+          <p className="text-red-500 text-xs p-1">* {submitError}</p>
+        )}
       </form>
       <div className="flex flex-row gap-2 items-center justify-center">
         <p>Ya tienes una cuenta?</p>
