@@ -3,13 +3,17 @@ import { useState } from "react";
 import LoginEmail from "./LoginEmail";
 import LoginPassword from "./LoginPassword";
 //rrd
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+//custom hooks
+import { useUser } from "../../hooks/useUser";
 
 const Login = () => {
   const [step, setStep] = useState<"email" | "password">("email");
   const [email, setEmail] = useState<string>("");
 
   const navigate = useNavigate();
+
+  const { user, loading } = useUser();
 
   /* -------------------------------------------------------------------- handler functions */
 
@@ -21,6 +25,16 @@ const Login = () => {
   const handleBacktoEmail = () => {
     setStep("email");
   };
+
+  /* -------------------------------------------------------------------- user session verification */
+
+  if (loading) {
+    return <p>Verificando Usuario...</p>;
+  }
+
+  if (user) {
+    return <Navigate to={"/"} replace />;
+  }
 
   return (
     <div className="p-2 mt-8">

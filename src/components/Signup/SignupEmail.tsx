@@ -1,6 +1,6 @@
 import { useState } from "react";
 //rrd
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 //types
 import { CreateUserInput } from "../../types/createUserInput";
 //db-utils
@@ -18,7 +18,7 @@ import { useUser } from "../../hooks/useUser";
 const SignupEmail = () => {
   const navigate = useNavigate();
 
-  const { setUser } = useUser();
+  const { setUser, user, loading } = useUser();
 
   const [inputData, setInputData] = useState<CreateUserInput>({
     name: "",
@@ -106,6 +106,16 @@ const SignupEmail = () => {
 
     return Object.keys(newErrors).length > 0;
   };
+
+  /* -------------------------------------------------------------------- user session verification */
+
+  if (loading) {
+    return <p>Verificando Usuario...</p>;
+  }
+
+  if (user) {
+    return <Navigate to={"/"} replace />;
+  }
 
   return (
     <div className="p-2 mt-8">

@@ -1,10 +1,24 @@
 //rrd
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 //react-icons
 import { MdEmail } from "react-icons/md";
+//custom hooks
+import { useUser } from "../../hooks/useUser";
 
 const Signup = () => {
   const navigate = useNavigate();
+
+  const { user, loading } = useUser();
+
+  /* -------------------------------------------------------------------- user session verification */
+
+  if (loading) {
+    return <p>Verificando Usuario...</p>;
+  }
+
+  if (user) {
+    return <Navigate to={"/"} replace />;
+  }
 
   return (
     <div className="p-2 mt-8">
