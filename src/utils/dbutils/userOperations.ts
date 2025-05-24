@@ -93,3 +93,13 @@ export const logoutUser = async () => {
     handleAxiosError(error);
   }
 };
+
+export const getFullUserProfile = async () => {
+  const url = new URL("user", API_URL).toString();
+  try {
+    const response = await axios.get(url, { withCredentials: true });
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error);
+  }
+};
