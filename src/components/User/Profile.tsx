@@ -4,27 +4,39 @@ import { Navigate } from "react-router-dom";
 //custom hooks
 import { useUser } from "../../hooks/useUser";
 //utils
-import { getFullUserProfile } from "../../utils/dbutils/userOperations";
+import {
+  getFullUserProfile,
+  getUserPosts,
+} from "../../utils/dbutils/userOperations";
 //interfaces
 import { UserProfile } from "../../types/userProfile";
+import { PostPreview } from "../../types/postPreview";
+//components
+import InfoSection from "./InfoSection";
 
 const Profile = () => {
   const { user, loading } = useUser();
 
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [userPosts, setUserPosts] = useState<PostPreview[] | null>(null);
 
   useEffect(() => {
     if (user) {
-      const fetchUserProfile = async () => {
+      const fetchProfileAndPosts = async () => {
         try {
-          const response = await getFullUserProfile();
-          setProfile(response.user);
-          console.log("Full user profile:", response); // or set to state
+          const [profileResponse, postsResponse] = await Promise.all([
+            getFullUserProfile(),
+            getUserPosts(user.userId),
+          ]);
+          setProfile(profileResponse.user);
+          setUserPosts(postsResponse);
+          console.log("Full user profile:", profileResponse); // or set to state
+          console.log("All posts by user:", postsResponse); // or set to state
         } catch (err) {
-          console.error("Error fetching profile", err);
+          console.error("Error fetching user's profile and posts", err);
         }
       };
-      fetchUserProfile();
+      fetchProfileAndPosts();
     }
   }, [user]);
 
@@ -38,7 +50,17 @@ const Profile = () => {
     return <Navigate to={"/"} replace />;
   }
 
-  return <div>Perfil: {profile && <p>{profile.name} </p>}</div>;
+  if (!profile) {
+    return <p>Cargando Perfil de Usuario...</p>;
+  }
+
+  return (
+    <div>
+      <div className="p-4 mt-6">
+        <InfoSection userProfile={profile} />
+      </div>
+    </div>
+  );
 };
 
 export default Profile;

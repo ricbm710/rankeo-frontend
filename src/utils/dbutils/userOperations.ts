@@ -5,6 +5,7 @@ import { CreateUserInput } from "../../types/createUserInput";
 import { EmailLoginInput } from "../../types/emailLoginInput";
 //utils
 import { handleAxiosError } from "./handleAxiosErrors";
+import { PostPreview } from "../../types/postPreview";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -101,5 +102,20 @@ export const getFullUserProfile = async () => {
     return response.data;
   } catch (error) {
     handleAxiosError(error);
+  }
+};
+
+export const getUserPosts = async (
+  userId: number
+): Promise<PostPreview[] | null> => {
+  try {
+    const url = new URL(`users/${userId}/posts`, API_URL).toString();
+    const response = await axios.get(url);
+
+    // Expecting { posts: [...] }
+    return response.data.posts;
+  } catch (error) {
+    handleAxiosError(error);
+    return null;
   }
 };
