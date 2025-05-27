@@ -13,6 +13,7 @@ import { UserProfile } from "../../types/userProfile";
 import { PostPreview } from "../../types/postPreview";
 //components
 import InfoSection from "./InfoSection";
+import Preview from "../Post/Preview";
 
 const Profile = () => {
   const { user, loading } = useUser();
@@ -58,6 +59,16 @@ const Profile = () => {
     <div>
       <div className="p-4 mt-6">
         <InfoSection userProfile={profile} />
+      </div>
+      <div className="mt-2 bg-col-bg-dark p-2 m-1 border border-gray-400">
+        <h3 className="text-center font-semibold mb-4">Rankings Creados:</h3>
+        {userPosts && userPosts.length > 0 && (
+          <div>
+            {userPosts.map((post) => (
+              <Preview post={post} key={post.id} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
