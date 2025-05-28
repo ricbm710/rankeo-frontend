@@ -9,39 +9,49 @@ import Preview from "../components/Post/Preview";
 
 const Home = () => {
   const [posts, setPosts] = useState<PostPreview[]>([]);
-  const [contentLoading, setContentLoading] = useState<boolean>(true);
-  const [contentError, setContentError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // pagination with lazy loading
+  const [page, setPage] = useState<number>(1);
+  const [hasMore, setHasMore] = useState<boolean>(true);
+
+  const loadMorePosts = async () => {
+    if (loading || !hasMore) return;
+    setLoading(true);
+    try {
+      const fetchedPosts = await getPostsWithVotes(page);
+      if (fetchedPosts.length === 0) setHasMore(false);
+      else {
+        setPosts((prev) => [...prev, ...fetchedPosts]);
+
+        setPage((prev) => prev + 1);
+      }
+    } catch (err) {
+      console.error("No se pudo cargar los rankings.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const getPosts = async () => {
-      try {
-        const fetchedPosts = await getPostsWithVotes();
-        setPosts(fetchedPosts);
-        setContentLoading(false);
-      } catch (error) {
-        console.error("No se pudo traer las publicaciones:", error);
-        setContentError("No se pudo cargar el contenido.");
-      }
-    };
-    getPosts();
+    console.log("useEffect fired");
+    loadMorePosts();
   }, []);
 
   return (
-    <>
+    <div>
+      {error && <p>{error}</p>}
       <div>
-        {contentError ? (
-          <p>{contentError}</p>
-        ) : contentLoading ? (
-          <p>Cargando Contenido...</p>
-        ) : (
-          <div>
-            {posts.map((post) => (
-              <Preview post={post} key={post.id} />
-            ))}
-          </div>
-        )}
+        {posts.map((post) => (
+          <Preview key={post.id} post={post} />
+        ))}
       </div>
-    </>
+      {hasMore && !loading && (
+        <button onClick={loadMorePosts}>Cargar más</button>
+      )}
+      {loading && <p>Cargando más publicaciones...</p>}
+    </div>
   );
 };
 
