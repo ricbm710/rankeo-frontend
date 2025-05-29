@@ -6,6 +6,8 @@ import { PostPreview } from "../types/postPreview";
 import { getPostsWithVotes } from "../utils/dbutils/postOperations";
 //components
 import Preview from "../components/Post/Preview";
+import { SortTypeToggle } from "../components/Visuals/SortTypeToggle";
+import { SortOrderToggle } from "../components/Visuals/SortOrderToggle";
 
 const Home = () => {
   const [posts, setPosts] = useState<PostPreview[]>([]);
@@ -15,6 +17,10 @@ const Home = () => {
   // pagination with lazy loading
   const [page, setPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
+
+  //Slider Toggle
+  const [sortType, setSortType] = useState<"Relevance" | "Date">("Relevance");
+  const [sortOrder, setSortOrder] = useState<"Asc" | "Desc">("Desc");
 
   const loadMorePosts = async () => {
     if (loading || !hasMore) return;
@@ -35,21 +41,27 @@ const Home = () => {
   };
 
   useEffect(() => {
-    console.log("useEffect fired");
     loadMorePosts();
   }, []);
 
   return (
     <div>
       {error && <p>{error}</p>}
+      <div className="flex flex-row p-4 justify-between items-center gap-4">
+        <SortTypeToggle selected={sortType} onChange={setSortType} />
+        <SortOrderToggle selected={sortOrder} onChange={setSortOrder} />
+      </div>
       <div>
         {posts.map((post) => (
           <Preview key={post.id} post={post} />
         ))}
       </div>
-      {hasMore && !loading && (
-        <button onClick={loadMorePosts}>Cargar más</button>
-      )}
+      <div className="flex justify-center p-2">
+        {hasMore && !loading && (
+          <button onClick={loadMorePosts}>Cargar Mas</button>
+        )}
+        {!hasMore && <p>No hay mas Rankings para mostrar.</p>}
+      </div>
       {loading && <p>Cargando más publicaciones...</p>}
     </div>
   );
