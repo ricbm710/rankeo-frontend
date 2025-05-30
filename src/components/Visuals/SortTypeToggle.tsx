@@ -1,5 +1,5 @@
 // components/SortTypeToggle.tsx
-type SortType = "Relevance" | "Date";
+type SortType = "relevance" | "date";
 
 type SortTypeToggleProps = {
   selected: SortType;
@@ -7,7 +7,7 @@ type SortTypeToggleProps = {
 };
 
 export function SortTypeToggle({ selected, onChange }: SortTypeToggleProps) {
-  const isRight = selected === "Date";
+  const isRight = selected === "date";
 
   return (
     <div className="flex items-center gap-2">
@@ -20,7 +20,7 @@ export function SortTypeToggle({ selected, onChange }: SortTypeToggleProps) {
       </span>
 
       <div
-        onClick={() => onChange(isRight ? "Relevance" : "Date")}
+        onClick={() => onChange(isRight ? "relevance" : "date")}
         className="w-12 h-6 bg-gray-300 rounded-full relative cursor-pointer"
       >
         <div

@@ -1,4 +1,4 @@
-type SortOrder = "Asc" | "Desc";
+type SortOrder = "asc" | "desc";
 
 type SortOrderToggleProps = {
   selected: SortOrder;
@@ -6,7 +6,7 @@ type SortOrderToggleProps = {
 };
 
 export function SortOrderToggle({ selected, onChange }: SortOrderToggleProps) {
-  const isDesc = selected === "Desc";
+  const isDesc = selected === "desc";
 
   return (
     <div className="flex items-center gap-2">
@@ -19,7 +19,7 @@ export function SortOrderToggle({ selected, onChange }: SortOrderToggleProps) {
       </span>
 
       <div
-        onClick={() => onChange(isDesc ? "Asc" : "Desc")}
+        onClick={() => onChange(isDesc ? "asc" : "desc")}
         className="w-12 h-6 bg-gray-300 rounded-full relative cursor-pointer"
       >
         <div

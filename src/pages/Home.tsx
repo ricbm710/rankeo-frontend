@@ -19,19 +19,25 @@ const Home = () => {
   const [hasMore, setHasMore] = useState<boolean>(true);
 
   //Slider Toggle
-  const [sortType, setSortType] = useState<"Relevance" | "Date">("Relevance");
-  const [sortOrder, setSortOrder] = useState<"Asc" | "Desc">("Desc");
+  const [sortType, setSortType] = useState<"relevance" | "date">("relevance");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
-  const loadMorePosts = async () => {
+  const loadMorePosts = async (customPage?: number) => {
     if (loading || !hasMore) return;
     setLoading(true);
+    const pageToFetch = customPage ?? page;
     try {
-      const fetchedPosts = await getPostsWithVotes(page);
+      const fetchedPosts = await getPostsWithVotes({
+        page: pageToFetch,
+        sortType,
+        sortOrder,
+      });
       if (fetchedPosts.length === 0) setHasMore(false);
       else {
-        setPosts((prev) => [...prev, ...fetchedPosts]);
-
-        setPage((prev) => prev + 1);
+        setPosts((prev) =>
+          pageToFetch === 1 ? fetchedPosts : [...prev, ...fetchedPosts]
+        );
+        setPage(pageToFetch + 1); // Update based on the page we just fetched
       }
     } catch (err) {
       console.error("No se pudo cargar los rankings.");
@@ -41,8 +47,11 @@ const Home = () => {
   };
 
   useEffect(() => {
-    loadMorePosts();
-  }, []);
+    setPosts([]);
+    setHasMore(true);
+    loadMorePosts(1);
+    setPage(2); // Since first page is already loaded
+  }, [sortOrder, sortType]);
 
   return (
     <div>
@@ -58,7 +67,7 @@ const Home = () => {
       </div>
       <div className="flex justify-center p-2">
         {hasMore && !loading && (
-          <button onClick={loadMorePosts}>Cargar Mas</button>
+          <button onClick={() => loadMorePosts()}>Cargar Mas</button>
         )}
         {!hasMore && <p>No hay mas Rankings para mostrar.</p>}
       </div>
