@@ -21,6 +21,8 @@ export const getPostsWithVotes = async ({
     API_URL
   ).toString();
 
+  // console.log(url);
+
   try {
     const response = await axios.get(url);
     return response.data;

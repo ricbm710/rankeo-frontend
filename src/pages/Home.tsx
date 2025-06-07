@@ -8,8 +8,19 @@ import { getPostsWithVotes } from "../utils/dbutils/postOperations";
 import Preview from "../components/Post/Preview";
 import { SortTypeToggle } from "../components/Visuals/SortTypeToggle";
 import { SortOrderToggle } from "../components/Visuals/SortOrderToggle";
+//rrd
+import { useSearchParams } from "react-router-dom";
 
 const Home = () => {
+  //sync URL with sorting and pagination
+  const [searchParams, setSearchParams] = useSearchParams(); // 🆕
+
+  // 🆕 Use query params for initial values
+  const initialSortType =
+    (searchParams.get("sortType") as "relevance" | "date") || "relevance";
+  const initialSortOrder =
+    (searchParams.get("sortOrder") as "asc" | "desc") || "desc";
+
   const [posts, setPosts] = useState<PostPreview[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -19,11 +30,13 @@ const Home = () => {
   const [hasMore, setHasMore] = useState<boolean>(true);
 
   //Slider Toggle
-  const [sortType, setSortType] = useState<"relevance" | "date">("relevance");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [sortType, setSortType] = useState<"relevance" | "date">(
+    initialSortType
+  ); // 🆕
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">(initialSortOrder); // 🆕
 
-  const loadMorePosts = async (customPage?: number) => {
-    if (loading || !hasMore) return;
+  const loadMorePosts = async (force = false, customPage?: number) => {
+    if (loading || (!hasMore && !force)) return;
     setLoading(true);
     const pageToFetch = customPage ?? page;
     try {
@@ -46,10 +59,19 @@ const Home = () => {
     }
   };
 
+  // 🆕 Sync sortType and sortOrder to the URL
   useEffect(() => {
+    setSearchParams({
+      sortType,
+      sortOrder,
+    });
+  }, [sortType, sortOrder]);
+
+  useEffect(() => {
+    console.log(hasMore); //TODO
     setPosts([]);
     setHasMore(true);
-    loadMorePosts(1);
+    loadMorePosts(true, 1);
     setPage(2); // Since first page is already loaded
   }, [sortOrder, sortType]);
 
